@@ -1,0 +1,21 @@
+<div *ngIf="playersNamed">
+  <h2> {{activePlayer.name}}'s Turn </h2>
+  <map [activePlayer]="activePlayer" (playerResolve)="switchPlayer($event)"></map>
+</div>  
+<div *ngIf="!playersNamed">
+  <div *ngIf="!numberOfPlayersSelected">
+    <p>How many players will be exploring Nowhere?</p>
+    <div *ngFor="let i of numberOfPossiblePlayers">
+      <button (click)="selectNumberOfPlayers(i)">{{i}} player</button><br>
+    </div>
+  </div>
+  <div *ngIf="numberOfPlayersSelected">
+    <div *ngFor="let player of players">
+      <div *ngIf="!player.playerNamed">
+        <input name="name-{{player.id}}" [(ngModel)]="player.name">
+        <div>Player {{player.id + 1}}</div>
+        <button (click)="namePlayer(player.id)">Submit</button><br>
+      </div>
+    </div>
+  </div>
+</div>

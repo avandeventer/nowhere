@@ -1,0 +1,14 @@
+<h2>{{selectedLocation.name}}</h2>
+<body>
+  <div >
+    <div *ngIf="!locationChosen">
+      <div *ngFor="let location of locations">
+        <location (click)="locationChange(location)" [location]="location"></location>
+      </div>
+    </div>
+    <div *ngIf="locationChosen">
+      <encounter [selectedLocation]="selectedLocation" [activePlayer]="activePlayer" (playerResolve)="switchPlayer($event)"></encounter>
+      <button (click)="returnToMap()">Return to Map</button>
+    </div>
+  </div>
+</body>
