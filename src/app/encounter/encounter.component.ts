@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { STORIES } from '../stories';
 import { Story } from '../story';
 import { Location } from '../location';
 import { StoryOption } from '../storyOption';
 import { Player } from '../player';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'encounter',
@@ -13,25 +14,55 @@ import { Player } from '../player';
 
 export class EncounterComponent implements OnInit {
 
-  constructor() {
-    this.selectedStory = this.stories[0];
+  constructor(private db: AngularFirestore) {
   }
 
+  storiesCollection: AngularFirestoreCollection<Story>;
+  storyOptionsCollection: AngularFirestoreCollection<StoryOption>;
+  storiesObservable: Observable<Story[]>;
+  storyOptionsObservable: Observable<StoryOption[]>;
   @Input() selectedLocation: Location;
   @Input() activePlayer: Player;
-
-
   @Output() playerResolve = new EventEmitter();
-
-  stories: Story[] = STORIES;
   
   selectedStory: Story;
-
   selectedChoice: StoryOption;
-
   choiceSelected: boolean = false;
 
   ngOnInit() {
+      let storyDirectory = 'locations/';
+      storyDirectory = storyDirectory.concat(this.selectedLocation.name).concat('/stories/');
+      this.storiesCollection = this.db.collection(storyDirectory);
+      this.storiesObservable = this.storiesCollection.valueChanges();
+      this.storiesObservable.subscribe((story) => {
+          console.log(story);
+          this.selectedStory = story[0];//Math.random() * (story.length)];
+          console.log("Selected story ", this.selectedStory);
+          let storyOptionsDirectory = storyDirectory.concat(this.selectedStory.storyTitle).concat('/storyOptions/');
+          this.storyOptionsCollection = this.db.collection(storyOptionsDirectory);
+          this.storyOptionsObservable = this.storyOptionsCollection.valueChanges();
+    
+          this.storyOptionsObservable.subscribe((storyOptions) => {
+            console.log(storyOptions);
+            this.selectedStory.storyOptions = storyOptions;
+            console.log("Selected story plus options ", this.selectedStory);
+          });
+    
+      });
+
+
+      console.log("PREFIX ", this.selectedStory);
+  }
+
+  deserializeDatabaseStory(databaseStory: Story): Story {
+    let angularStory: Story;
+    angularStory.locationName = databaseStory.locationName;
+    angularStory.storyDescription = databaseStory.storyDescription;
+    angularStory.storyTitle = databaseStory.storyTitle;
+    angularStory.storyOptions = databaseStory.storyOptions;
+    angularStory.played = databaseStory.played;
+    angularStory.authorPlayerId = databaseStory.authorPlayerId;
+    return angularStory;
   }
 
   locationResolve(location: Location) {
@@ -41,11 +72,21 @@ export class EncounterComponent implements OnInit {
     //   return (locationStory.id === locationId)
     // });
     // this.selectedStory { locationId: number } = locationStories[0];
-    // this.selectedStory = stories[Math.floor(Math.random() * this.stories.length)];
+    // this.selectedStory = stories[Math.floor(Math.random() * this.stories.length)];  
   }
 
-  isGreaterThanZero (stat: number): boolean {
-    return stat > 0;
+  isNotZero (stat: number): boolean {
+    return stat != 0;
+  }
+
+  rewardText (stat: number): string {
+    let rewardText: string = '';
+    if(this.isNotZero(stat)) {
+      let rewardStatus: string = 'gained ';
+      if(stat < 0) rewardStatus = 'lost ';  
+      rewardText = 'You '.concat(rewardStatus).concat(stat.toString()).concat(' ');
+    }
+    return rewardText;
   }
 
   choiceSelect(optionSelected: StoryOption) {
@@ -57,5 +98,5 @@ export class EncounterComponent implements OnInit {
     this.activePlayer.strength = this.activePlayer.strength + optionSelected.strength;
     this.activePlayer.wealth = this.activePlayer.wealth + optionSelected.wealth;
     this.playerResolve.emit(this.activePlayer);
-  }
+  }  
 }

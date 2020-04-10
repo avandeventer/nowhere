@@ -1,11 +1,18 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<!-- <app-top-bar></app-top-bar> -->
+
+<div class="container">
   <h1>
     {{ title }} beckons
   </h1>
   <img width="200" alt="Fire Thingy" src="https://media.giphy.com/media/zGGAbke6loNNe/giphy.gif">
+  <body>
+      <player-manager></player-manager>
+  </body>
+  <router-outlet></router-outlet>
 </div>
-<body>
-    <player-manager></player-manager>
-</body>
-<router-outlet></router-outlet>
+
+<!-- 
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

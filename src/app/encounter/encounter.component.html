@@ -1,20 +1,24 @@
 <body>
+  <!-- <div *ngFor="let story of stories | async"> -->
   <h3>
-      {{selectedStory.storyTitle}}
+    {{selectedStory?.storyTitle}}
   </h3>
-  <p>
-    {{selectedStory.storyDescription}}
-  </p>
-  <div *ngFor="let storyOption of selectedStory.storyOptions">
+  
+  <div *ngIf="!choiceSelected">
+    {{selectedStory?.storyDescription}}
+  </div>
+  <div *ngFor="let storyOption of selectedStory?.storyOptions">
     <div *ngIf="!choiceSelected">
       <button (click)="choiceSelect(storyOption)">{{storyOption.choiceText}}</button>
     </div>
   </div>
   <div *ngIf="choiceSelected">
       {{selectedChoice.resolutionText}}
-      <div *ngIf="isGreaterThanZero(selectedChoice.strength)">You gained {{selectedChoice.strength}} strength!</div>
-      <div *ngIf="isGreaterThanZero(selectedChoice.dexterity)">You gained {{selectedChoice.dexterity}} dexterity!</div>
-      <div *ngIf="isGreaterThanZero(selectedChoice.charisma)">You gained {{selectedChoice.charisma}} charisma!</div>
-      <div *ngIf="isGreaterThanZero(selectedChoice.intellect)">You gained {{selectedChoice.intellect}} intellect!</div>
-    </div>
+      <div *ngFor ></div>
+      <div *ngIf="isNotZero(selectedChoice.strength)">You gained {{selectedChoice.strength}} strength!</div>
+      <div *ngIf="isNotZero(selectedChoice.dexterity)">You gained {{selectedChoice.dexterity}} dexterity!</div>
+      <div *ngIf="isNotZero(selectedChoice.charisma)">You gained {{selectedChoice.charisma}} charisma!</div>
+      <div *ngIf="isNotZero(selectedChoice.intellect)">You gained {{selectedChoice.intellect}} intellect!</div>
+      <div *ngIf="isNotZero(selectedChoice.wealth)">You gained {{selectedChoice.wealth}} wealth!</div>
+  </div>
 </body>

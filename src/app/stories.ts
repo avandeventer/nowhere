@@ -2,7 +2,7 @@ import { Story } from './story';
 
 export const STORIES: Story[] = [
     { 
-        locationId: 1, locationName: 'The Forest', 
+        locationName: 'The Forest', 
         storyTitle: 'Cat Eye McCreedy', 
         storyDescription: 'As you step into the woods, a haggard looking man staggers out from the forest. His eyes glow yellow, the sign of something nocturnal.', 
         played: false,
@@ -33,7 +33,7 @@ export const STORIES: Story[] = [
         ]
     },
     { 
-        locationId: 1, locationName: 'The Forest', 
+        locationName: 'The Forest', 
         storyTitle: 'The Mad Hypnotist', 
         storyDescription: 'A woman approaches you with a strange request.',
         played: false,
