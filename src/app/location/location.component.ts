@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { STORIES } from '../stories';
-import { Story } from '../story';
-import { Location } from '../location';
-import { LOCATIONS } from '../locations';
+import { STORIES } from '../../assets/stories';
+import { Story } from '../../assets/story';
+import { Location } from '../../assets/location';
+import { LOCATIONS } from '../../assets/locations';
 
 @Component({
   selector: 'location',

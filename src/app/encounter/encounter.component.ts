@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Story } from '../story';
-import { Location } from '../location';
-import { StoryOption } from '../storyOption';
-import { Player } from '../player';
+import { Story } from '../../assets/story';
+import { Location } from '../../assets/location';
+import { StoryOption } from '../../assets/storyOption';
+import { Player } from '../../assets/player';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
+import { StoryService } from 'services/story.service';
 
 @Component({
   selector: 'encounter',
@@ -28,30 +29,33 @@ export class EncounterComponent implements OnInit {
   selectedStory: Story;
   selectedChoice: StoryOption;
   choiceSelected: boolean = false;
+  storyService: StoryService;
 
   ngOnInit() {
-      let storyDirectory = 'locations/';
-      storyDirectory = storyDirectory.concat(this.selectedLocation.name).concat('/stories/');
-      this.storiesCollection = this.db.collection(storyDirectory);
-      this.storiesObservable = this.storiesCollection.valueChanges();
-      this.storiesObservable.subscribe((story) => {
-          console.log(story);
-          this.selectedStory = story[0];//Math.random() * (story.length)];
-          console.log("Selected story ", this.selectedStory);
-          let storyOptionsDirectory = storyDirectory.concat(this.selectedStory.storyTitle).concat('/storyOptions/');
-          this.storyOptionsCollection = this.db.collection(storyOptionsDirectory);
-          this.storyOptionsObservable = this.storyOptionsCollection.valueChanges();
-    
-          this.storyOptionsObservable.subscribe((storyOptions) => {
-            console.log(storyOptions);
-            this.selectedStory.storyOptions = storyOptions;
-            console.log("Selected story plus options ", this.selectedStory);
-          });
-    
-      });
+    // this.selectedStory = this.storyService.readStory(this.selectedLocation.name);
+    this.readStory(this.selectedLocation.name);
+    console.log("PREFIX ", this.selectedStory);
+  }
 
-
-      console.log("PREFIX ", this.selectedStory);
+  readStory(locationName: string) {
+    let storyDirectory = 'locations/';
+    storyDirectory = storyDirectory.concat(locationName).concat('/stories/');
+    this.storiesCollection = this.db.collection(storyDirectory);
+    this.storiesObservable = this.storiesCollection.valueChanges();
+    this.storiesObservable.subscribe((story) => {
+        console.log(story);
+        this.selectedStory = story[0];//Math.random() * (story.length)];
+        console.log("Selected story ", this.selectedStory);
+        let storyOptionsDirectory = storyDirectory.concat(this.selectedStory.storyTitle).concat('/storyOptions/');
+        this.storyOptionsCollection = this.db.collection(storyOptionsDirectory);
+        this.storyOptionsObservable = this.storyOptionsCollection.valueChanges();
+  
+        this.storyOptionsObservable.subscribe((storyOptions) => {
+          console.log(storyOptions);
+          this.selectedStory.storyOptions = storyOptions;
+          console.log("Selected story plus options ", this.selectedStory);
+        });
+    });
   }
 
   deserializeDatabaseStory(databaseStory: Story): Story {

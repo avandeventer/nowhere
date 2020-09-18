@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from '../player';
-import { Story } from '../story';
+import { Player } from '../../assets/player';
+import { GameSession } from '../../assets/gameSession';
+import { GameSessionService } from 'services/game-session.service';
 
 @Component({
   selector: 'player-manager',
@@ -16,12 +17,12 @@ export class PlayerManagerComponent implements OnInit {
   playersNamed: boolean = false;
   playersSelected: boolean = false;
   activePlayer: Player;
-  storyDeck: Story[] = [];
+  gameStarted: boolean;
+  gameCode: string;
 
-  constructor() { }
+  constructor(private gameSessionService: GameSessionService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
   selectNumberOfPlayers(numberOfPlayers: number) {
     this.numberOfPlayers = numberOfPlayers;
@@ -45,6 +46,30 @@ export class PlayerManagerComponent implements OnInit {
       this.playersNamed = true;
     }
   }
+
+  createGameSession() {
+    this.gameStarted = true;
+    this.gameCode = this.generateGameCode(4);
+    let gameSession: Object = {"code": this.generateGameCode(4), "players": []};
+    console.log("GAME SESSION ", gameSession);
+    this.gameSessionService.form.value.gameSession = gameSession;
+    let data = this.gameSessionService.form.value;
+    this.gameSessionService.createGameSession(data)
+        .then(res => {
+          console.log("You saved a new game session! " + res);
+        });
+  }
+
+  generateGameCode(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+  
 
   switchPlayer(resolvedPlayer: Player) {
     this.players[resolvedPlayer.id] = resolvedPlayer;

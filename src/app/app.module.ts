@@ -11,7 +11,7 @@ import { EncounterComponent } from './encounter/encounter.component';
 import { OptionComponent } from './option/option.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [

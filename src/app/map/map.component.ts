@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { LOCATIONS } from '../locations';
-import { Location } from '../location';
-import { Player } from '../player';
+import { LOCATIONS } from '../../assets/locations';
+import { Location } from '../../assets/location';
+import { Player } from '../../assets/player';
 
 @Component({
   selector: 'map',
