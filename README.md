@@ -1,6 +1,6 @@
 # Nowhere
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+A multiplayer party game where players write short story prompts for each other and collaborate to decide what happens. Still a work in progress. 
+![TheOldWoman](https://user-images.githubusercontent.com/12936511/185807612-f8a973f8-66a0-4863-aa33-493fd598c03c.PNG)
 
 ## Development server
 
