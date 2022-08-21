@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from '../../assets/player';
-import { GameSession } from '../../assets/gameSession';
 import { GameSessionService } from 'services/game-session.service';
 
 @Component({
@@ -49,8 +48,7 @@ export class PlayerManagerComponent implements OnInit {
 
   createGameSession() {
     this.gameStarted = true;
-    this.gameCode = this.generateGameCode(4);
-    let gameSession: Object = {"code": this.generateGameCode(4), "players": []};
+    let gameSession: Object = {"code": this.gameCode, "players": []};
     console.log("GAME SESSION ", gameSession);
     this.gameSessionService.form.value.gameSession = gameSession;
     let data = this.gameSessionService.form.value;
@@ -59,6 +57,16 @@ export class PlayerManagerComponent implements OnInit {
           console.log("You saved a new game session! " + res);
         });
   }
+
+  getPlayers = () =>
+  this.gameSessionService
+  .getGameSession()
+  .subscribe(res =>{
+    console.log("Data arriving!")
+    console.log(res[0].payload)
+    this.players = res;
+  });
+
 
   generateGameCode(length) {
     var result = '';
